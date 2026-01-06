@@ -1,15 +1,15 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Camera, MessageSquare, Leaf, History, User as UserIcon } from 'lucide-react';
-import Header from './components/Header';
-import CameraView from './components/CameraView';
-import ResultCard from './components/ResultCard';
-import AssistantChat from './components/AssistantChat';
-import AuthScreen from './components/AuthScreen';
-import HistoryView from './components/HistoryView';
-import { RecyclingInfo, MapStation, User, ScanRecord } from './types';
-import { analyzeRecyclable, findRecyclingStations } from './services/geminiService';
-import { historyService } from './services/historyService';
+import Header from './components/Header.tsx';
+import CameraView from './components/CameraView.tsx';
+import ResultCard from './components/ResultCard.tsx';
+import AssistantChat from './components/AssistantChat.tsx';
+import AuthScreen from './components/AuthScreen.tsx';
+import HistoryView from './components/HistoryView.tsx';
+import { RecyclingInfo, MapStation, User, ScanRecord } from './types.ts';
+import { analyzeRecyclable, findRecyclingStations } from './services/geminiService.ts';
+import { historyService } from './services/historyService.ts';
 
 enum AppView {
   HOME = 'home',
@@ -28,7 +28,6 @@ const App: React.FC = () => {
   const [recyclingInfo, setRecyclingInfo] = useState<RecyclingInfo | null>(null);
   const [stations, setStations] = useState<MapStation[]>([]);
 
-  // Auth persistence check
   useEffect(() => {
     const savedUser = localStorage.getItem('ecolearn_current_user');
     if (savedUser) setUser(JSON.parse(savedUser));
@@ -55,7 +54,6 @@ const App: React.FC = () => {
       const info = await analyzeRecyclable(base64Image);
       setRecyclingInfo(info);
 
-      // Save to history if logged in
       if (user) {
         historyService.saveScan(user.id, base64Image, info);
       }
@@ -82,7 +80,6 @@ const App: React.FC = () => {
     setCapturedImage(record.image);
     setRecyclingInfo(record.info);
     setView(AppView.RESULT);
-    // Find stations for the history item
     findRecyclingStations(record.info.category).then(setStations);
   };
 

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { historyService } from '../services/historyService';
-import { ScanRecord, User } from '../types';
+import { historyService } from '../services/historyService.ts';
+import { ScanRecord, User } from '../types.ts';
 import { Calendar, Trash2, ChevronRight, Search, Inbox } from 'lucide-react';
 
 interface HistoryViewProps {

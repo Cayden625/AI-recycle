@@ -1,5 +1,5 @@
 
-import { ScanRecord, RecyclingInfo } from '../types';
+import { ScanRecord, RecyclingInfo } from '../types.ts';
 
 const HISTORY_KEY = 'ecolearn_history';
 

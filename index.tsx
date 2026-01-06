@@ -1,26 +1,32 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
 
-const mountApp = () => {
+const mountApplication = () => {
   const rootElement = document.getElementById('root');
   if (!rootElement) {
-    console.error("Could not find root element to mount to");
+    console.error("Critical Failure: Root element not found in DOM.");
     return;
   }
 
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
+  try {
+    const root = createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    console.log("EcoLearn successfully initialized.");
+  } catch (err) {
+    console.error("Mounting error:", err);
+    rootElement.innerHTML = `<div style="padding: 20px; color: #b91c1c; font-weight: bold;">Mounting Error: ${err.message}</div>`;
+  }
 };
 
-// Ensure DOM is ready before mounting
+// Handle mounting regardless of DOM state
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountApp);
+  document.addEventListener('DOMContentLoaded', mountApplication);
 } else {
-  mountApp();
+  mountApplication();
 }
