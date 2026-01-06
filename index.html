@@ -7,7 +7,20 @@
   <title>EcoLearn: AI Recycle Assistant</title>
   
   <script>
-    // Robust environment shim for browser execution in subfolders
+    // FIX FOR GITHUB PAGES: Detect repository name in path
+    (function() {
+      const repoName = 'AI-recycle';
+      const path = window.location.pathname;
+      if (path.includes(repoName) && !document.querySelector('base')) {
+        const base = document.createElement('base');
+        // Ensure base href ends with a slash for relative path resolution
+        base.href = path.endsWith('/') ? path : path + '/';
+        document.head.appendChild(base);
+        console.log("Base path set to:", base.href);
+      }
+    })();
+
+    // Robust environment shim
     window.process = { 
       env: { API_KEY: "" },
       browser: true,
@@ -20,20 +33,10 @@
     // Diagnostic Tool: Capture errors and show them on screen if the app hangs
     window.addEventListener('error', function(event) {
       console.error('Global Error:', event.error);
-      const root = document.getElementById('root');
       const debug = document.getElementById('debug-log');
       if (debug) {
         debug.style.display = 'block';
         debug.innerHTML += `<div style="margin-bottom:8px">❌ ${event.message}<br><small>${event.filename}:${event.lineno}</small></div>`;
-      }
-    });
-
-    window.addEventListener('unhandledrejection', function(event) {
-      console.error('Unhandled Promise Rejection:', event.reason);
-      const debug = document.getElementById('debug-log');
-      if (debug) {
-        debug.style.display = 'block';
-        debug.innerHTML += `<div style="margin-bottom:8px">⚠️ Promise Failed: ${event.reason?.message || event.reason}</div>`;
       }
     });
   </script>
@@ -79,15 +82,17 @@
       left: 20px;
       right: 20px;
       max-height: 150px;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.9);
       color: #ff9999;
       font-family: monospace;
-      font-size: 10px;
-      padding: 12px;
-      border-radius: 8px;
+      font-size: 11px;
+      padding: 15px;
+      border-radius: 12px;
       z-index: 10000;
       display: none;
       overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
     @keyframes pulse {
@@ -116,26 +121,48 @@
   <div id="loading-screen">
     <div class="loader-leaf"></div>
     <p style="margin-top: 20px; font-weight: 800; color: #10b981; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;">Booting AI-Recycle...</p>
+    <button id="force-start" style="margin-top: 30px; padding: 10px 20px; background: #f1f5f9; border: none; border-radius: 12px; color: #64748b; font-size: 10px; font-weight: 800; cursor: pointer; display: none;">Force Start</button>
   </div>
 
-  <div id="debug-log"></div>
+  <div id="debug-log">
+    <div style="font-weight: bold; border-bottom: 1px solid #444; margin-bottom: 8px; padding-bottom: 4px;">SYSTEM DIAGNOSTICS</div>
+  </div>
 
   <div id="root"></div>
 
-  <!-- Note: Removed the leading dot for cleaner module resolution on GH Pages subfolders -->
-  <script type="module" src="index.tsx"></script>
+  <!-- Note: Using ./ is critical for relative resolution in subfolders -->
+  <script type="module" src="./index.tsx"></script>
 
   <script>
-    // Logic to hide the loader as soon as the DOM is ready, rather than waiting for all images
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM Content Loaded, preparing UI...');
+    // Logic to hide the loader and handle hangs
+    const hideLoader = () => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+      }
+    };
+
+    // Auto-hide after 5 seconds even if something fails
+    setTimeout(() => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        document.getElementById('force-start').style.display = 'block';
+        document.getElementById('force-start').onclick = hideLoader;
+      }
+    }, 5000);
+
+    window.addEventListener('load', () => {
+      console.log('Window loaded, verifying mounting...');
+      // Wait a bit for React to actually render
       setTimeout(() => {
-        const loader = document.getElementById('loading-screen');
-        if (loader) {
-          loader.style.opacity = '0';
-          setTimeout(() => loader.remove(), 500);
+        if (document.getElementById('root').children.length > 0) {
+          hideLoader();
+        } else {
+          console.warn('Root is empty after load, app might have failed to mount.');
+          document.getElementById('debug-log').style.display = 'block';
         }
-      }, 1000); 
+      }, 500);
     });
   </script>
 </body>
