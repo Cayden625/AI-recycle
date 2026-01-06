@@ -1,0 +1,9 @@
+{
+  "name": "Ai recycle ",
+  "description": "Snap a photo of any item to learn how to recycle it correctly. Discover the environmental consequences of waste and find your nearest recycling station with real-time AI guidance.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
