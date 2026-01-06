@@ -11,6 +11,8 @@ import { RecyclingInfo, MapStation, User, ScanRecord } from './types.ts';
 import { analyzeRecyclable, findRecyclingStations } from './services/geminiService.ts';
 import { historyService } from './services/historyService.ts';
 
+console.log("App.tsx: Module loaded");
+
 enum AppView {
   HOME = 'home',
   CAMERA = 'camera',
@@ -29,8 +31,15 @@ const App: React.FC = () => {
   const [stations, setStations] = useState<MapStation[]>([]);
 
   useEffect(() => {
+    console.log("App.tsx: Initializing user state");
     const savedUser = localStorage.getItem('ecolearn_current_user');
-    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.warn("Failed to parse saved user", e);
+      }
+    }
   }, []);
 
   const handleLogin = (u: User) => {

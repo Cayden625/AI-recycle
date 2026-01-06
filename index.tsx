@@ -3,28 +3,30 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
+console.log("index.tsx: Execution started...");
+
 const mountApplication = () => {
   const rootElement = document.getElementById('root');
   if (!rootElement) {
-    console.error("Critical Failure: Root element not found in DOM.");
+    console.error("index.tsx: Root element not found.");
     return;
   }
 
   try {
+    console.log("index.tsx: Creating React root...");
     const root = createRoot(rootElement);
     root.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>
     );
-    console.log("EcoLearn successfully initialized.");
+    console.log("index.tsx: Render called.");
   } catch (err) {
-    console.error("Mounting error:", err);
-    rootElement.innerHTML = `<div style="padding: 20px; color: #b91c1c; font-weight: bold;">Mounting Error: ${err.message}</div>`;
+    console.error("index.tsx: Render error:", err);
   }
 };
 
-// Handle mounting regardless of DOM state
+// Start the mount process
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', mountApplication);
 } else {
