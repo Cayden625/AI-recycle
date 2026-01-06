@@ -2,9 +2,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { RecyclingInfo, MapStation } from "../types.ts";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function analyzeRecyclable(base64Image: string): Promise<RecyclingInfo> {
+  // Lazy init to prevent top-level script errors
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+  
   const prompt = `Analyze this image of waste. Identify what it is and tell me exactly how to recycle it correctly. 
   Include the potential environmental consequences if this item is just thrown in the trash instead of recycled.
   Return the response in JSON format.`;
@@ -40,6 +41,7 @@ export async function analyzeRecyclable(base64Image: string): Promise<RecyclingI
 }
 
 export async function findRecyclingStations(category: string, lat?: number, lng?: number): Promise<MapStation[]> {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
   const prompt = `Find the 3 closest recycling drop-off stations for ${category} waste. Provide direct links to their locations on maps.`;
   
   try {
