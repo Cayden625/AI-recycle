@@ -4,7 +4,7 @@ import { Camera, MessageSquare, Leaf, History, User as UserIcon } from 'lucide-r
 import Header from './components/Header';
 import CameraView from './components/CameraView';
 import ResultCard from './components/ResultCard';
-import VoiceChat from './components/VoiceChat';
+import AssistantChat from './components/AssistantChat';
 import AuthScreen from './components/AuthScreen';
 import HistoryView from './components/HistoryView';
 import { RecyclingInfo, MapStation, User, ScanRecord } from './types';
@@ -15,7 +15,7 @@ enum AppView {
   HOME = 'home',
   CAMERA = 'camera',
   RESULT = 'result',
-  VOICE_CHAT = 'voice_chat',
+  ASSISTANT = 'assistant',
   AUTH = 'auth',
   HISTORY = 'history'
 }
@@ -140,7 +140,7 @@ const App: React.FC = () => {
               </button>
 
               <button 
-                onClick={() => setView(AppView.VOICE_CHAT)}
+                onClick={() => setView(AppView.ASSISTANT)}
                 className="flex items-center justify-between p-5 bg-blue-600 hover:bg-blue-700 text-white rounded-3xl transition-all shadow-xl active:scale-95 group"
               >
                 <div className="flex items-center gap-4">
@@ -148,8 +148,8 @@ const App: React.FC = () => {
                     <MessageSquare size={26} />
                   </div>
                   <div className="text-left">
-                    <p className="font-bold text-xl">Voice Guide</p>
-                    <p className="text-blue-100 text-sm">Ask our eco-assistant</p>
+                    <p className="font-bold text-xl">Eco Assistant</p>
+                    <p className="text-blue-100 text-sm">Talk or type to AI</p>
                   </div>
                 </div>
               </button>
@@ -186,8 +186,8 @@ const App: React.FC = () => {
           />
         )}
 
-        {view === AppView.VOICE_CHAT && (
-          <VoiceChat onBack={() => setView(AppView.HOME)} />
+        {view === AppView.ASSISTANT && (
+          <AssistantChat onBack={() => setView(AppView.HOME)} />
         )}
 
         {view === AppView.AUTH && (
@@ -213,7 +213,7 @@ const App: React.FC = () => {
           <Camera size={28} />
         </button>
         
-        <button onClick={handleHistoryClick} className={`flex flex-col items-center gap-1 transition-colors ${view === AppView.HISTORY || view === AppView.AUTH ? 'text-emerald-600' : 'text-gray-400'}`}>
+        <button onClick={handleHistoryClick} className={`flex flex-col items-center gap-1 transition-colors ${view === AppView.HISTORY || view === AppView.AUTH || view === AppView.ASSISTANT ? 'text-emerald-600' : 'text-gray-400'}`}>
           <History size={24} className={view === AppView.HISTORY ? 'fill-emerald-600/10' : ''} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Account</span>
         </button>

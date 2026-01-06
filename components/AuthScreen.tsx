@@ -87,4 +87,48 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin }) => {
               type="email"
               placeholder="Email address"
               className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white outline-none font-bold text-slate-900 transition-all shadow-sm"
-              
+              value={formData.email}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
+            />
+          </div>
+          <div className="relative">
+            <Lock className="absolute left-4 top-4 text-slate-400" size={20} />
+            <input
+              required
+              type="password"
+              placeholder="Password"
+              className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white outline-none font-bold text-slate-900 transition-all shadow-sm"
+              value={formData.password}
+              onChange={e => setFormData({ ...formData, password: e.target.value })}
+            />
+          </div>
+
+          {error && <p className="text-red-600 text-sm font-black bg-red-50 p-3 rounded-xl border border-red-100">{error}</p>}
+
+          <button
+            disabled={loading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-all active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-70 mt-4"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : (
+              <>
+                <span className="text-lg">{isLogin ? 'Sign In' : 'Sign Up'}</span>
+                <ArrowRight size={22} />
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="text-center pt-4">
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-emerald-700 font-extrabold hover:text-emerald-800 transition-colors"
+          >
+            {isLogin ? "New here? Create account" : 'Already have an account? Sign in'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AuthScreen;
