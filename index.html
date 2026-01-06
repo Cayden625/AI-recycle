@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>EcoLearn: AI Recycle Assistant</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +15,7 @@
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
       color: #0f172a;
+      overscroll-behavior-y: contain;
     }
 
     @keyframes fadeIn {
@@ -33,9 +35,13 @@
     .animate-scaleIn {
       animation: scaleIn 0.3s ease-out forwards;
     }
+    
+    ::-webkit-scrollbar {
+      display: none;
+    }
   </style>
 
-  <!-- Shim for process.env to prevent crashes in browser environments -->
+  <!-- Critical shim for process.env to prevent ReferenceErrors on static hosts like GitHub -->
   <script>
     window.process = window.process || { env: { API_KEY: "" } };
   </script>
@@ -54,7 +60,6 @@
 </head>
 <body>
   <div id="root"></div>
-  <!-- Entry point for the application -->
   <script type="module" src="index.tsx"></script>
 </body>
 </html>
